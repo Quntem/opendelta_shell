@@ -1,0 +1,156 @@
+<head>
+    <style>
+        .sidebar {
+            min-height: 100%;
+            min-width: 200px;
+            border-right: 1px solid #e4e4e7;
+            background-color: #fafafa;
+        }
+        .mainarea {
+            min-height: 100%;
+            width: 100%;
+            overflow-y: scroll !important;
+        }
+
+        .filesbody {
+            max-height: 100%;
+            width: 100%;
+            overflow-y: scroll !important;
+        }
+
+        .topbar {
+            min-height: 45px;
+            width: 100%;
+            border-bottom: 1px solid #e4e4e7;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #666666;
+        }
+
+        body {
+            margin: 0px;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            border: none !important;
+            width: 100%;
+            overflow: scroll;
+            box-sizing: content-box;
+            border-spacing: 0px;
+            color: #666666;
+        }
+
+        td, th {
+            /* border: 1px solid #dddddd; */
+            text-align: left;
+            padding: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* td {
+            margin: 5px !important;
+            border-radius: 10px;
+        } */
+
+        table>tr {
+            margin: 5px !important;
+            border-radius: 10px;
+            /* display: block; */
+        }
+
+        th {
+            background-color: #fafafa;
+            border-bottom: 1px solid #e4e4e7;
+            margin-bottom: 5px !important;
+        }
+
+        thead {
+            position: sticky !important;
+            top: 0;
+        }
+
+        table thead {
+            inset-block-start: 0; /* "top" */
+        }
+
+        table {
+            max-height: 100%;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #eeeeee;
+        }
+    </style>
+    <script src="/app/delta/delta.js"></script>
+</head>
+<body>
+    <div class="topbar delta-draggable">
+        <div style="margin-left: 15px; margin-bottom: 5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+        </div>
+        <div style="margin-left: 10px; margin-bottom: 5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div style="margin-left: 15px; height: 20px; width: 2px; border-radius: 2px; background-color: #e4e4e7; margin-bottom: 5px;">
+        </div>
+        <div style="margin-left: 15px; margin-bottom: 5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-folder-plus"><path d="M12 10v6"/><path d="M9 13h6"/><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg>
+        </div>
+        <div style="margin-left: 15px; margin-bottom: 5px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-plus"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M9 15h6"/><path d="M12 18v-6"/></svg>
+        </div>
+    </div>
+    <div style="width: 100%; height: calc(100% - 46px); display: flex; flex-direction: row; align-items: center; color: #666666;">
+        <div class="sidebar">
+            <div onclick="Delta.quit()">
+                quit
+            </div>
+        </div>
+        <div class="mainarea">
+            <div class="filesbody">
+                <table id="fileslist" border="0">
+                    <thead>
+                        <tr class="header">
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Type</th>
+                        <!-- <th>Date Modified</th> -->
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        Delta.files.list("/").then((files) => {
+            files.forEach((file) => {
+                var row = document.createElement("tr");
+                var name = document.createElement("td");
+                var size = document.createElement("td");
+                var type = document.createElement("td");
+                var date = document.createElement("td");
+                name.innerHTML = file.name;
+                size.innerHTML = file.size;
+                type.innerHTML = file.fileType;
+                date.innerHTML = file.dateModified;
+                row.appendChild(name);
+                row.appendChild(size);
+                row.appendChild(type);
+                // row.appendChild(date);
+                document.querySelector("tbody").appendChild(row);
+            });
+        });
+        setTimeout(() => {
+            $(".topbar").attr("linkedid", Delta.appid)
+        }, 500);
+    </script>
+</body>

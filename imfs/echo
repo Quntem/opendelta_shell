@@ -1,0 +1,12 @@
+var cmdlet = async function() {
+    return new Promise((resolve) => {
+        $(el).closest(".termarea").append(`
+            <div style="margin-top: 10px; margin-left: 10px;">
+                <div style="display: inline; color: #666666;">
+                    ` + cmdarg + `
+                </div>
+            </div>
+        `)
+        resolve("done")
+    });
+}

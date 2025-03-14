@@ -1,0 +1,47 @@
+var cmdlet = async function() {
+    return new Promise((resolve) => {
+        fetch("/app/delta/imfs/" + cmdarg.trim() + "/manifest.json")
+            .then(response => response.json())
+            .then(data => {
+                winarea = document.getElementById("winarea")
+                newwin = document.createElement("deltashell-window")
+                newwin.setAttribute("wintitle", data.name)
+                if(data.titlebarstyle == "connected") {
+                    newwin.setAttribute("cntitlebar", "true")
+                } else if(data.titlebarstyle == "hidden") {
+                    newwin.setAttribute("type", "ctb")
+                }
+                newwin.setAttribute("linkedpid", currentpid)
+                newiframe = document.createElement("iframe")
+                newiframe.setAttribute("src", "/app/delta/imfs/" + cmdarg.trim() + "/index.html")
+                newiframe.setAttribute("style", "width: 100%; height: calc(100% - 40px); border: none; outline: none;")
+                newwin.appendChild(newiframe)
+                winarea.appendChild(newwin)
+                new QDProcess("New App", newiframe)
+                newiframe.addEventListener("load", function() {
+                    newiframe.contentWindow.postMessage(JSON.stringify({
+                        "sender": "qudelta",
+                        "fn": "initapp",
+                        "appid": currentpid - 1
+                    }))
+                })
+                $(function () {
+                    $(newwin).draggable({
+                      create: function () {
+                        iframe = newiframe
+                        iframe.addEventListener("load", function () {
+                          const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                          const iframeHandle = $(iframeDocument).find(".delta-draggable");
+                          iframeHandle.on("mousedown", function (event) {
+                            // console.log(event)
+                            $("deltasys-window[linkedpid=`" + event.currentTarget.getAttribute("linkedid") + "']").trigger(event);
+                          });
+                        });
+                      },
+                      handle: null,
+                    });
+                });                  
+                resolve("done")
+            })
+    });
+}

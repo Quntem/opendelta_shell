@@ -1,0 +1,35 @@
+var cmdlet = async function() {
+    return new Promise((resolve) => {
+        $("#winarea").append(`
+            <deltashell-window wintitle="Delta Terminal">
+                <!-- <deltashell-window-menubar id="termmenubar">
+                    <deltashell-window-menubar-item>
+                        File
+                    </deltashell-window-menubar-item>
+                    <deltashell-window-menubar-item>
+                        Window
+                    </deltashell-window-menubar-item>
+                    <deltashell-window-menubar-item>
+                        Options
+                    </deltashell-window-menubar-item>
+                </deltashell-window-menubar> -->
+                <div class="termarea" style="height: calc(100% - 70px); overflow: scroll;" onclick="termareaclick(this)">
+                    <div style="margin-top: 10px; margin-left: 10px;" class="userinpblock">
+                        <div style="display: inline; color: rgb(0, 133, 88);">User $</div>
+                        <input style="background-color: rgba(255, 255, 255, 0); color: #666666; border: none; outline: none; font-size: 16px; padding: 0px; width: calc(100% - 100px);" onkeypress="runshellcmd(this, event)"></input>
+                    </div>
+                </div>
+                <script>
+                    var output = function(item) {
+                        return item
+                    }
+
+                    var termareaclick = function(elm) {
+                        $(elm).find(".userinpblock").find("input").focus()
+                    }
+                </script>
+            </deltashell-window>
+        `)
+        resolve("done")
+    });
+}

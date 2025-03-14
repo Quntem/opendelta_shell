@@ -1,0 +1,67 @@
+deltashell-tb {
+    width: 100%;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.726);
+    bottom: 0px;
+    position: fixed;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #666666;
+}
+
+deltashell-window {
+    width: 500px;
+    height: 350px;
+    background-color: rgb(245, 245, 245);
+    display: block;
+    position: absolute !important;
+    top: 0px;
+    left: 0px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    overflow: hidden;
+}
+
+.ui-resizable-handle {
+    opacity: 0;
+}
+
+deltashell-window-handle {
+    width: 100%;
+    height: 40px;
+    background-color: rgb(255, 255, 255);
+    display: block;
+    border-bottom: 1px solid #e4e4e7;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #666666;
+}
+
+deltashell-window-menubar {
+    width: 100%;
+    height: 30px;
+    background-color: rgb(249, 249, 249);
+    display: block;
+    border-bottom: 1px solid #e4e4e7;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #666666;
+}
+
+deltashell-window-menubar-item {
+    margin-left: 13px;
+    margin-right: 2px;
+    font-size: 14px;
+}
+
+/* theme styles */
+
+.deltabg {
+    background: rgb(14,255,219);
+    background: linear-gradient(144deg, rgba(14,255,219,1) 0%, rgba(0,213,254,1) 97%, rgba(0,212,255,1) 100%);
+}

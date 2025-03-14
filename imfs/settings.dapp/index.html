@@ -1,0 +1,27 @@
+<head>
+    <style>
+        .sidebar {
+            min-height: 100%;
+            width: 200px;
+            border-right: 1px solid #e4e4e7;
+            background-color: #fafafa;
+            display: block;
+        }
+        body {
+            margin: 0px;
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+    <script src="/app/delta/delta.js"></script>
+</head>
+<body>
+    <div style="width: 100%; height: 100%; display: flex; flex-direction: row; align-items: center; color: #666666;">
+        <div class="sidebar">
+            <div onclick="Delta.quit()">
+                quit
+            </div>
+        </div>
+        <div></div>
+    </div>
+</body>

@@ -1,0 +1,38 @@
+var cmdlet = async function() {
+    return new Promise((resolve) => {
+        argslist = cmdarg.split(" ")
+        if(argslist[0] == "list") {
+            textwinlist = ""
+            openwins = Array.from(document.getElementById("winarea").children)
+            openwins.forEach(win => {
+                textwinlist = textwinlist + "<li>" + $(win).attr("wintitle") + "</li><ul><li>z-index: " + $(win).css("z-index") + "</li></ul>"
+            })
+            $(el).closest(".termarea").append(`
+                <div style="margin-top: 10px; margin-left: 10px;">
+                    <div style="display: inline; color: #666666;">
+                        <ul>
+                            ` + textwinlist + `
+                        </ul>
+                    </div>
+                </div>
+            `)
+        } else if (argslist[0] == "help") {
+            $(el).closest(".termarea").append(`
+                <div style="margin-top: 10px; margin-left: 10px;">
+                    <div style="display: inline; color: #666666;">
+                        Delta Window Commands
+                        <ul>
+                            <li>
+                                list: list the open windows
+                            </li>    
+                            <li>
+                                help: display this message
+                            </li>    
+                        </ul>
+                    </div>
+                </div>
+            `)
+        }
+        resolve("done")
+    });
+}

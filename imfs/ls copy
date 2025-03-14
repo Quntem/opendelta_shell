@@ -1,0 +1,29 @@
+fetch("/app/delta/imfs/list/")
+.then(res => res.json())
+.then(res => {
+    textfilelist = ""
+    res.forEach(filelement => {
+        textfilelist = textfilelist + filelement + ", "
+    })
+    $(el).closest(".termarea").append(`
+        <div style="margin-top: 10px; margin-left: 10px;">
+            <div style="display: inline; color: #666666;">
+                ` + textfilelist + `
+            </div>
+        </div>
+    `)
+})
+
+fileslist = await fetch("/app/delta/imfs/list/")
+        newfilelist = await fileslist.json()
+        textfilelist = ""
+        newfilelist.forEach(filelement => {
+            textfilelist = textfilelist + filelement + ", "
+        })
+        $(el).closest(".termarea").append(`
+            <div style="margin-top: 10px; margin-left: 10px;">
+                <div style="display: inline; color: #666666;">
+                    ` + textfilelist + `
+                </div>
+            </div>
+        `)
