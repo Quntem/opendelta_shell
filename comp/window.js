@@ -16,6 +16,14 @@ class deltawinhandle extends HTMLElement {
             $(this).css("border-bottom", "0px solid #e4e4e7")
         }
 
+        if ($(this).attr("titlefgcolor") != undefined) {
+            $(this).css("color", $(this).attr("titlefgcolor"))
+        }
+
+        if ($(this).attr("titlebgcolor") != undefined) {
+            $(this).css("background-color", $(this).attr("titlebgcolor"))
+        }
+
         $(this).attr("ondblclick", "minmaxwin(this)")
 
         $(this).html(`
@@ -43,7 +51,7 @@ class deltawin extends HTMLElement {
     }
   
     connectedCallback() {
-        $(this).prepend(`<deltashell-window-handle type="` + $(this).attr("titletype") + `" cntitlebar="` + $(this).attr("cntitlebar") + `" wintitle="` + $(this).attr("wintitle") + `"></deltashell-window-handle>`)
+        $(this).prepend(`<deltashell-window-handle type="` + $(this).attr("titletype") + `" cntitlebar="` + $(this).attr("cntitlebar") + `" wintitle="` + $(this).attr("wintitle") + `" titlefgcolor="` + $(this).attr("titlefgcolor") + `" titlebgcolor="` + $(this).attr("titlebgcolor") + `"></deltashell-window-handle>`)
         $(this).resizable({handles: "n, e, s, w, ne, se, sw, nw" })
         if ($(this).attr("type") != "ctb") {
             $(this).draggable({handle: "deltashell-window-handle"})
@@ -78,7 +86,8 @@ var closewin = function(cb) {
 
 var minmaxwin = function(cb) {
     win = $(cb).closest("deltashell-window")
-    winarea = $("cloudplus-app-area")
+    // winarea = $("cloudplus-app-area")
+    winarea = $("#winarea")
     if (win.attr("state") != "max") {
         win.attr("oldheight", win.height())
         win.attr("oldwidth", win.width())
@@ -89,11 +98,13 @@ var minmaxwin = function(cb) {
             left: "0",
             width: winarea.width(),
             height: winarea.height() - 50,
+            // height: winarea.height(),
             boxShadow: "none",
             borderRadius: "0px"
         }, animspeed, function() {
             win.width("100%")
             win.height("calc(100% - 50px")
+            // win.height("100%")
             win.draggable("disable")
             win.resizable("disable")
             win.attr("state", "max")

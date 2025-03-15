@@ -1,92 +1,116 @@
 <head>
     <link rel="stylesheet" href="/global/fonts.css"></link>
-    <link rel="stylesheet" href="/global/beaconstyles.css"></link>
+    <!-- <link rel="stylesheet" href="/global/beaconstyles.css"></link> -->
     <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
     <script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away-subtle.css"/>
-    <script src="/global/comp/header.js"></script>
     <script src="/global/jquery.js"></script>
-    <script
-        async
-        crossorigin="anonymous"
-        data-clerk-publishable-key="pk_test_c3VpdGVkLWZpbmNoLTIuY2xlcmsuYWNjb3VudHMuZGV2JA"
-        src="https://suited-finch-2.clerk.accounts.dev/npm/@clerk/clerk-js@5.35.0/dist/clerk.browser.js"
-        type="text/javascript">
+    <script src="/global/jqueryui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/global/xterm.css" />
+    <script type="module">
+        import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+esm';
+        window.fitAddon = new FitAddon();
     </script>
+    <script src="/global/xterm.js"></script>
+    <script src="comp/window.js"></script>
+    <!-- <script src="/global/comp/header.js"></script> -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="shell.js"></script>
+    <script src="delta.js"></script>
 </head>
-<body class="applicationstyle">
-    <beacon-header type="application" appname="Cloud+ Delta"></beacon-header>
-    <div id="multiapp-area" style="display: flex; flex-direction: row; width: 100%; height: calc(100% - 61px); overflow: scroll;">
-        <cloudplus-app-area style="display: flex; flex-direction: row;">
-            <script>
-                var selitem = "sidebar-button-home"
-                var sidebarbuttonclick = function(el) {
-                    selitem = $(el).attr('id')
-                    $('.sidebar-button-sel').removeClass('sidebar-button-sel')
-                    $(el).addClass('sidebar-button-sel')
-                }
-            </script>
-            <style>
-                .beacon-sidebar {
-                    height: calc(100% - 40px);
-                    min-width: 260px;
-                    background-color: #fafafa;
-                    border-right: 1px solid #e4e4e7;
-                    padding: 20px;
-                }
-
-                .sidebar-button {
-                    width: 100%;
-                    height: 40px;
-                    border-radius: 10px;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    color: #666666;
-                    margin-bottom: 10px;
-                    border: 1px solid #e4e4e700;
-                }
-
-                .sidebar-button:hover {
-                    background-color: rgb(235, 235, 235);
-                    border: 1px solid #e4e4e700;
-                }
-
-                .sidebar-button-sel {
-                    background-color: rgb(239, 239, 239);
-                    border: 1px solid #e4e4e7;
-                }
-
-                .sidebar-button-sel:hover {
-                    background-color: #efefef;
-                    border: 1px solid #e4e4e7;
-                }
-            </style>
-            <div class="beacon-sidebar">
-                <div class="poppins-regular" style="margin-bottom: 10px; font-size: 14px; color: #797979;">Delta</div>
-                <div class="sidebar-button sidebar-button-sel" id="sidebar-button-home" onclick="sidebarbuttonclick(this)">
-                    <div style="margin-right: 10px; margin-left: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
-                    </div>
-                    <div class="poppins-regular">Home</div>
+<body class="applicationstyle deltabg">
+    <script>
+        var baseurl = window.location.protocol + "//" + window.location.hostname + ':3000'
+        var animspeed = 100
+        var globalz = 0
+        var deltahideheader = function() {
+            $("beacon-header").hide()
+        }
+    </script>
+    <style>
+        .cl-organizationSwitcherTrigger {
+            color: white !important;
+        }
+    </style>
+    <!-- <beacon-header type="delta" appname="Cloud+ Delta" docname="New DeskSpace" style="background-color: #404040ae; border-bottom: #adadad; color: white;"></beacon-header> -->
+    <div class="deltabg" id="multiapp-area" style="display: flex; flex-direction: row; width: 100%; height: calc(100% - 0px); overflow: none;">
+        <cloudplus-app-area style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+            <deltashell-tb>
+                <!-- <div style="margin-left: 15px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip"><circle cx="12" cy="5" r="1"/><circle cx="19" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="19" r="1"/><circle cx="5" cy="19" r="1"/></svg>
                 </div>
-                <div class="sidebar-button" id="sidebar-button-desktops" onclick="sidebarbuttonclick(this)">
-                    <div style="margin-right: 10px; margin-left: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-monitor-up"><path d="m9 10 3-3 3 3"/><path d="M12 13V7"/><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
-                    </div>
-                    <div class="poppins-regular">Your Desktops</div>
+                <div style="margin-left: 10px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </div> -->
+                <div style="margin-left: 15px" id="deltashell-launcherbutton">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-dashboard"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
                 </div>
-                <div class="sidebar-button" id="sidebar-button-create" onclick="sidebarbuttonclick(this)">
-                    <div style="margin-right: 10px; margin-left: 10px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-copy-plus"><line x1="15" x2="15" y1="12" y2="18"/><line x1="12" x2="18" y1="15" y2="15"/><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                    </div>
-                    <div class="poppins-regular">Create</div>
+                <div style="margin-left: 15px; height: 22px; width: 2px; border-radius: 100px; background-color: #adadad;"></div>
+                <div style="margin-right: 15px; margin-left: auto; height: 22px; width: 2px; border-radius: 100px; background-color: #adadad;"></div>
+                <div style="margin-right: 15px" onclick="document.getElementById('multiapp-area').requestFullscreen()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-expand"><path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8"/><path d="M3 16.2V21m0 0h4.8M3 21l6-6"/><path d="M21 7.8V3m0 0h-4.8M21 3l-6 6"/><path d="M3 7.8V3m0 0h4.8M3 3l6 6"/></svg>
                 </div>
+                <div style="margin-right: 15px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bell"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></svg>
+                </div>
+                <div style="margin-right: 15px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings-2"><path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/></svg>
+                </div>
+            </deltashell-tb>
+            <div id="winarea" style="display: block; width: 100%; height: 100%; position: fixed;">
+                <script>
+                    newfileget = fetch(baseurl + '/service/dfs/mount/bin/get/term')
+                    .then(getres => getres.text())
+                    .then(async (getres) => {
+                        eval(getres)
+                        await cmdlet()
+                    })
+                    var dragactive = false
+                    var currentwin = ""
+
+                    var mousex = 0
+                    var mousey = 0
+                    var offsetx = 0
+                    var offsety = 0
+
+                    // document.getElementById("winarea").onclick = function() {
+                    //     if (dragactive) {
+                    //         dragactive = false
+                    //     } else {
+                    //         offsetx = mousex - $(currentwin).offset().left
+                    //         offsety = mousey - $(currentwin).offset().top
+                    //         dragactive = true
+                    //     }
+                    // }
+
+                    document.getElementById("winarea").onmousemove = function(event) {
+                        mousex = event.clientX
+                        mousey = event.clientY
+                        if (dragactive) {
+                            // $(currentwin).offset({
+                            //     top: (mousey - ($(currentwin).offset().top - mousey)),
+                            //     left: (mousex - ( $(currentwin).offset().left - mousex))
+                            // })
+                            // console.log($(currentwin).offset().top, $(currentwin).offset().left)
+                            $(currentmovewin).offset({
+                                top: (mousey - offsety),
+                                left: (mousex - offsetx)
+                            })
+                        }
+                    }
+                </script>
+                <!-- <deltashell-window titletype="expanded"></deltashell-window>
+                <deltashell-window></deltashell-window>
+                <deltashell-window titletype="expanded"></deltashell-window> -->
             </div>
-            <div style="width: 100%; height: 100%;">
-
-            </div>
-        </div>
+        </cloudplus-app-area>
     </div>
-    <script src="/global/auth.js"></script>
+    <script>
+        setInterval(() => {
+            $("deltashell-tb").css("z-index", globalz)
+        }, 10);
+    </script>
+    <!-- <script src="/global/auth.js"></script> -->
+    <script src="main.js"></script>
 </body>

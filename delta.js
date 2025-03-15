@@ -42,10 +42,14 @@ class delta {
 window.Delta = new delta()
 
 window.addEventListener("message", function(event) {
-    if(JSON.parse(event.data).sender == "qudelta") {
-        if(JSON.parse(event.data).fn == "initapp") {
-            Delta.init(JSON.parse(event.data).appid)
-            console.log("Delta App Initialized, id: " + JSON.parse(event.data).appid)
+    try {
+        if(JSON.parse(event.data).sender == "qudelta") {
+            if(JSON.parse(event.data).fn == "initapp") {
+                Delta.init(JSON.parse(event.data).appid)
+                console.log("Delta App Initialized, id: " + JSON.parse(event.data).appid)
+            }
         }
+    } catch {
+
     }
 })

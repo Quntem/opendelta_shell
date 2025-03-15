@@ -65,3 +65,15 @@ deltashell-window-menubar-item {
     background: rgb(14,255,219);
     background: linear-gradient(144deg, rgba(14,255,219,1) 0%, rgba(0,213,254,1) 97%, rgba(0,212,255,1) 100%);
 }
+
+body {
+    background-color: #f9f9f9;
+    font-family: 'Figtree', sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #666666;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}

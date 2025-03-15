@@ -1,4 +1,35 @@
-var runshellcmd = async function(el, ev) {
+var runshellcmd = async function(inp) {
+    cmdres = ""
+    var fileelementglobal = ""
+    foundcmdlet = false
+    cmd = inp.split(" ")
+    cmdarg = ""
+    cmdname = cmd.shift()
+    cmd.forEach(element => {
+        cmdarg = cmdarg + element + " "
+    });
+    cmdarg = cmdarg.trim()
+    fileslist = await fetch(baseurl + '/service/dfs/mount/bin/list/')
+    res = await fileslist.json()
+    textfilelist = ""
+    await res.forEach(async (filelement) => {
+        if (filelement == cmdname) {
+            fileelementglobal = filelement
+            foundcmdlet = true
+        }
+    })
+    if (!foundcmdlet) {
+        return cmdname + ` is not the name of a recognised executable file`
+    } else {
+        newfileget = await fetch(baseurl + '/service/dfs/mount/bin/get/' + fileelementglobal)
+        getres = await newfileget.text()
+        eval(getres)
+        cmdres = await cmdlet()
+        return cmdres
+    }
+}
+
+var runshellcmdlgc2 = async function(el, ev) {
     foundcmdlet = false
     if (ev.key == "Enter") {
         $(el).attr("readonly", "true")
@@ -8,14 +39,14 @@ var runshellcmd = async function(el, ev) {
         cmd.forEach(element => {
             cmdarg = cmdarg + element + " "
         });
-        fileslist = fetch("/app/delta/imfs/list/")
+        fileslist = fetch(baseurl + '/service/dfs/mount/bin/list/')
         .then(res => res.json())
         .then(res => {
             textfilelist = ""
             res.forEach(async (filelement) => {
                 if (filelement == cmdname) {
                     foundcmdlet = true
-                    newfileget = fetch("/app/delta/imfs/get/" + filelement)
+                    newfileget = fetch(baseurl + '/service/dfs/mount/bin/get/' + filelement)
                     .then(getres => getres.text())
                     .then(async (getres) => {
                         eval(getres)
