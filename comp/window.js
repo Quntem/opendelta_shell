@@ -64,6 +64,33 @@ class deltawin extends HTMLElement {
             $(this).attr("winid", currentid)
             currentid += 1
         }
+        rscover = document.createElement('div')
+        $(rscover).attr("class", "rscover")
+        $(rscover).css("height", "0%")
+        $(rscover).css("width", "0%")
+        $(rscover).css("position", "absolute")
+        $(rscover).css("top", "0px")
+        $(this).append(rscover)
+
+        $(this).on( "resizestart", function( event, ui ) {
+            $(ui.element).find(".rscover").css("width", "100%")
+            $(ui.element).find(".rscover").css("height", "calc(100% - 40px)")
+        } );
+
+        $(this).on( "resizestop", function( event, ui ) {
+            $(ui.element).find(".rscover").css("width", "0%")
+            $(ui.element).find(".rscover").css("height", "0%")
+        } );
+
+        $(this).on( "dragstart", function( event, ui ) {
+            $(event.target).find(".rscover").css("width", "100%")
+            $(event.target).find(".rscover").css("height", "calc(100% - 40px)")
+        } );
+
+        $(this).on( "dragstop", function( event, ui ) {
+            $(event.target).find(".rscover").css("width", "0%")
+            $(event.target).find(".rscover").css("height", "0%")
+        } );
     }
 }
   

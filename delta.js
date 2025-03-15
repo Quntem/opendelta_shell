@@ -16,6 +16,22 @@ class delta {
         }))
     }
 
+    dragstop() {
+        window.top.postMessage(JSON.stringify({
+            "sender": "deltaapp",
+            "fn": "dragend",
+            "id": this.appid
+        }))
+    }
+
+    dragstart() {
+        window.top.postMessage(JSON.stringify({
+            "sender": "deltaapp",
+            "fn": "dragstart",
+            "id": this.appid
+        }))
+    }
+
     files = {
         list: function(pos) {
             window.top.postMessage(JSON.stringify({

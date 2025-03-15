@@ -41,29 +41,38 @@ window.addEventListener("message", function(event) {
                         "type": "listfiles",
                         "files": files
                     }), event.origin)
+                    console.log(files)
                 })
             }
             if(JSON.parse(event.data).fn == "dragstart") {
+                var foundwin = false
+                console.log("dragstart")
+                console.log(event.source.frameElement)
+                winitem = $(event.source.frameElement).closest("deltashell-window")
+                console.log(winitem)
                 openwins = Array.from(document.getElementById("winarea").children)
+                // dragactive = true
                 openwins.forEach(win => {
-                    if($(win).attr("winid") == JSON.parse(event.data).id) {
+                    if($(win).attr("winid") == $(winitem[0]).attr("winid")) {
                         currentmovewin = win
+                        foundwin = true
                     }
                 })
-                offsetx = mousex - $(currentwin).offset().left
-                offsety = mousey - $(currentwin).offset().top
-                dragactive = true
+                if(foundwin) {
+                    console.log("found")
+                    window.offsetx = mousex - $(currentmovewin).offset().left
+                    window.offsety = mousey - $(currentmovewin).offset().top
+                    window.dragactive = true
+                    console.log(winitem)
+                    $(currentmovewin).find(".rscover").css("width", "100%")
+                    $(currentmovewin).find(".rscover").css("height", "100%")
+                }
             }
             if(JSON.parse(event.data).fn == "dragend") {
-                openwins = Array.from(document.getElementById("winarea").children)
-                openwins.forEach(win => {
-                    if($(win).attr("winid") == JSON.parse(event.data).id) {
-                        currentmovewin = win
-                    }
-                })
-                offsetx = mousex - $(currentwin).offset().left
-                offsety = mousey - $(currentwin).offset().top
-                dragactive = true
+                console.log("dragend")
+                $(currentmovewin).find(".rscover").css("width", "0%")
+                $(currentmovewin).find(".rscover").css("height", "0%")
+                dragactive = false
             }
         }
     } catch {
@@ -76,9 +85,9 @@ window.addEventListener("message", function(event) {
 var files = {
     list: function(pos) {
         return new Promise(async (resolve, reject) => {
-            console.log(baseurl + '/service/dfs/mount/system_files/list?pos=' + encodeURIComponent(pos))
+            console.log(baseurl + '/service/dfs/mount/system_volume/list?pos=' + encodeURIComponent(pos))
             try {
-                const response = await fetch(baseurl + '/service/dfs/mount/system_files/list?pos=' + encodeURIComponent(pos));
+                const response = await fetch(baseurl + '/service/dfs/mount/system_volume/list?pos=' + encodeURIComponent(pos));
     
                 if (!response.ok) {
                     const errorData = await response.json();
@@ -87,8 +96,8 @@ var files = {
                 }
     
                 const data = await response.json();
-                console.log('Files fetched:', data.files);
-                resolve(data.files); // Resolve the promise with the files array
+                console.log('Files fetched:', data);
+                resolve(data); // Resolve the promise with the files array
             } catch (error) {
                 reject(error); // Reject the promise if an error occurs
             }

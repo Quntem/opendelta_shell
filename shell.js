@@ -13,8 +13,8 @@ var runshellcmd = async function(inp) {
     res = await fileslist.json()
     textfilelist = ""
     await res.forEach(async (filelement) => {
-        if (filelement == cmdname) {
-            fileelementglobal = filelement
+        if (filelement.name == cmdname) {
+            fileelementglobal = filelement.name
             foundcmdlet = true
         }
     })
