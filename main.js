@@ -1,21 +1,63 @@
 var processes = []
 currentpid = 0
+currentwinpid = 0
 
 class QDProcess {
     constructor(name, iframe) {
         this.name = name
         this.iframe = iframe
-        this.element = $(this.iframe).closest("deltashell-window")
+        if(this.iframe != undefined) {
+            this.element = $(this.iframe).closest("deltashell-window")
+        }
+        this.windowlist = []
+        this.killCallback = undefined
+        this.processListPosition = processes.length
         this.init()
         this.pid = currentpid
         currentpid += 1
+    }
+
+    registerWindow(window) {
+        this.windowlist.push(window)
     }
 
     init() {
         console.log('QDAplication init')
         processes.push(this)
     }
+
+    kill() {
+        if (this.killCallback != undefined) {
+            this.killCallback()
+        }
+        if(this.element != undefined) {
+            this.element.remove()
+        }
+        if(this.windowlist.length > 0) {
+            this.windowlist.forEach(window => {
+                window.kill()
+            })
+        }
+        processes.splice(processes.indexOf(this), 1)
+    }
 }
+
+class QDWindowProcess {
+    constructor(options) {
+        this.window = options.window
+        this.winpid = currentwinpid
+        currentwinpid += 1
+    }
+    kill() {
+        this.window.remove()
+    }
+}
+
+window.addEventListener("keypress", function(event) {
+    if (event.key == "q" && event.ctrlKey) {
+        runcmdlet("term")
+    }
+})
 
 window.addEventListener("message", function(event) {
     try {
@@ -102,5 +144,130 @@ var files = {
                 reject(error); // Reject the promise if an error occurs
             }
         });
-    }
+    },
+    get: function(inp) {
+        return new Promise(async (resolve, reject) => {
+            var response = ""
+            try {
+                response = await fetch(baseurl + '/service/dfs/mount/system_volume/get/' + inp);
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    reject(new Error(`Error fetching files: ${errorData.error || response.statusText}`));
+                    return;
+                }
+    
+                const data = await response.text();
+                console.log('Files fetched:', data);
+                resolve(data); // Resolve the promise with the files array
+            } catch (error) {
+                reject(response.statusText); // Reject the promise if an error occurs
+            }
+        });
+    },
+    mkdir: function(pos, dirname) {
+        return new Promise(async (resolve, reject) => {
+            var response = ""
+            try {
+                response = await fetch(baseurl + '/service/dfs/mount/system_volume/mkdir?pos=' + encodeURIComponent(pos), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        dirname: dirname,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    reject(new Error(`Error fetching files: ${errorData.error || response.statusText}`));
+                    return;
+                }
+    
+                resolve(response)
+            } catch (error) {
+                reject(response.statusText)
+            }
+        });
+    },
+    rm: function(file) {
+        return new Promise(async (resolve, reject) => {
+            var response = ""
+            try {
+                response = await fetch(baseurl + '/service/dfs/mount/system_volume/delete?filename=' + encodeURIComponent(file), {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    reject(new Error(`Error fetching files: ${errorData.error || response.statusText}`));
+                    return;
+                }
+    
+                resolve(response)
+            } catch (error) {
+                reject(response.statusText)
+            }
+        });
+    },
+    exists: function(file) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(baseurl + '/service/dfs/mount/system_volume/exists?filename=' + encodeURIComponent(file));
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    reject(new Error(`Error fetching files: ${errorData.error || response.statusText}`));
+                    return;
+                }
+                const data = await response.json();
+                resolve(data)
+            } catch (error) {
+                reject(response.statusText)
+            }
+        });
+    },
+    write: function(content, file) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(baseurl + '/service/dfs/mount/system_volume/write?filename=' + encodeURIComponent(file), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        data: content,
+                    }),
+                });
+    
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    reject(new Error(`Error fetching files: ${errorData.error || response.statusText}`));
+                    return;
+                }
+    
+                const data = await response.text();
+                console.log('Files fetched:', data);
+                resolve(data); // Resolve the promise with the files array
+            } catch (error) {
+                reject(error); // Reject the promise if an error occurs
+            }
+        });
+    },
+}
+
+var runcmdlet = async function(inp, ps) {
+    newfileget = await fetch(baseurl + '/service/dfs/mount/bin/get/' + inp)
+    getres = await newfileget.text()
+    eval(getres)
+    process = new QDProcess(inp)
+    cmdres = await cmdlet({process, ...ps})
+    process.kill()
+    return cmdres
 }

@@ -1,8 +1,8 @@
-var runshellcmd = async function(inp) {
+var runshellcmd = async function({command, term, shellpos, setshellpos}) {
     cmdres = ""
     var fileelementglobal = ""
     foundcmdlet = false
-    cmd = inp.split(" ")
+    cmd = command.split(" ")
     cmdarg = ""
     cmdname = cmd.shift()
     cmd.forEach(element => {
@@ -24,7 +24,15 @@ var runshellcmd = async function(inp) {
         newfileget = await fetch(baseurl + '/service/dfs/mount/bin/get/' + fileelementglobal)
         getres = await newfileget.text()
         eval(getres)
-        cmdres = await cmdlet()
+        console.log(shellpos)
+        shellpos = shellpos
+        setshellpos = setshellpos
+        var process = new QDProcess(fileelementglobal)
+        cmdletthis = {
+            process: process,
+        }
+        cmdres = await cmdlet.call(cmdletthis, { term, shellpos, setshellpos, process })
+        process.kill()
         return cmdres
     }
 }
