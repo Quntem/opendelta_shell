@@ -12,15 +12,116 @@ deltashell-tb {
     color: #666666;
 }
 
+deltashell-tabbar.dtk-tabbar-vertical > deltashell-tab {
+    width: calc(100% - 24px);
+}
+
+deltashell-tab {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px 12px;
+    cursor: pointer;
+    width: fit-content;
+    color: #666666;
+    border-radius: 5px;
+}
+
+deltashell-tab:hover {
+    background-color: #00000008;
+}
+
+deltashell-list {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+    border: 1px solid #e4e4e7;
+    display: block;
+    overflow: hidden;
+}
+
+.deltashell-sidebar-header-text {
+    margin-left: auto;
+    margin-right: auto;
+    color: #666666;
+}
+
+deltashell-sidebar-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+}
+
+deltashell-navigation-stack {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: block;
+}
+
+deltashell-navigation-stack-item {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: block;
+}
+
+.deltashell-list-item-title {
+    font-size: 16px;
+    color: #666666;
+    font-weight: 500;
+}
+
+.deltashell-list-item-subtitle {
+    font-size: 14px;
+    color: #999999;
+}
+
+deltashell-list-item {
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+deltashell-list-item:hover {
+    background-color: #00000008;
+}
+
+deltashell-list-item:not(:last-child) {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+
+
+deltashell-tab[active="true"] {
+    background-color: #00000013;
+    color: #666666;
+}
+
+deltashell-tabbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.deltashell-toolbar-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 deltashell-window {
-    width: 500px;
-    height: 350px;
+    width: 600px;
+    height: 400px;
     background-color: rgb(245, 245, 245);
     display: block;
     position: absolute !important;
     top: 0px;
     left: 0px;
-    border-radius: 5px;
+    border-radius: 7px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     overflow: hidden;
 }
@@ -35,28 +136,96 @@ deltashell-window-handle {
     background-color: rgb(255, 255, 255);
     display: block;
     border-bottom: 1px solid #e4e4e7;
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     color: #666666;
+    z-index: 10;
+    box-shadow: rgba(27, 31, 35, 0.04) 0px 1px 0px, rgba(255, 255, 255, 0.25) 0px 1px 0px inset;
 }
 
-deltashell-window-menubar {
+.deltashell-window-title {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+deltashell-window-handle[type="expanded"] > .deltashell-window-close {
+    margin-right: 15px !important;
+}
+
+deltashell-menubar {
     width: 100%;
-    height: 30px;
+    height: 25px;
     background-color: rgb(249, 249, 249);
     display: block;
     border-bottom: 1px solid #e4e4e7;
     display: flex;
     flex-direction: row;
     align-items: center;
+    position: relative;
+    color: #666666
+}
+
+deltashell-menubar-menu-label[active="true"] {
+    border-bottom: 2px solid #2269a3;
+    height: 23px;
+}
+
+deltashell-menubar-menu-item {
+    padding: 5px 10px;
+    cursor: pointer;
+    width: calc(100% - 20px);
+    display: block;
+}
+
+deltashell-menubar-menu-item:hover {
+    background-color: #0000001c;
+}
+
+deltashell-toolbar {
+    display: block;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
     color: #666666;
 }
 
-deltashell-window-menubar-item {
-    margin-left: 13px;
-    margin-right: 2px;
-    font-size: 14px;
+deltashell-menubar-menu-label {
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 13px;
+    cursor: pointer;
+    position: relative;
+    height: 25px;
+    text-wrap: nowrap;
+}
+
+deltashell-menubar-menu-separator {
+    height: 1px;
+    background-color: #e4e4e7;
+    width: 100%;
+    display: block;
+}
+
+deltashell-menubar-menu-label:hover {
+    background-color: #0000001c;
+}
+
+deltashell-menubar-menu {
+    width: auto;
+    height: auto;
+    background-color: rgb(249, 249, 249);
+    display: block;
+    border: 1px solid #e4e4e7;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    color: #666666;
 }
 
 /* theme styles */
@@ -72,8 +241,91 @@ body {
     margin: 0;
     padding: 0;
     color: #666666;
+    user-select: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 }
 
 *::-webkit-scrollbar {
     display: none;
+}
+
+.deltashell-button {
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: 1px solid #e4e4e7;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #ffffff;
+    color: #666666;
+    position: relative;
+    overflow: hidden;
+}
+
+.deltashell-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.06);
+    opacity: 0;
+    transition: all 0.1s ease-in-out;
+}
+
+.deltashell-button:hover::after {
+    opacity: 0.5;
+}
+
+.deltashell-button:active::after {
+    opacity: 1;
+}
+.deltashell-icon-button {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #e4e4e7;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #ffffff;
+    color: #666666;
+}
+
+.deltashell-icon-button {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #e4e4e7;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    background-color: #ffffff;
+    color: #666666;
+}
+
+deltashell-window-flexprovider {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+}
+
+deltashell-sidebar {
+    max-width: 225px;
+    min-width: 225px;
+    height: 100%;
+    background-color: rgb(245, 245, 245);
+    display: block;
+    border-right: 1px solid #e4e4e7;
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+}
+
+.dtk-sidebar-hidden {
+    max-width: 0px;
+    min-width: 0px;
 }

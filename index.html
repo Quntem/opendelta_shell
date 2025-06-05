@@ -10,14 +10,18 @@
     <link rel="stylesheet" href="/global/xterm.css" />
     <script type="module">
         import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+esm';
-        window.fitAddon = new FitAddon();
+        // window.fitAddon = new FitAddon();
+        window.FitAddon = FitAddon
     </script>
     <script src="/global/xterm.js"></script>
     <script src="comp/window.js"></script>
     <!-- <script src="/global/comp/header.js"></script> -->
+    <script src="global/jqtouchpunch.js"></script>
     <link rel="stylesheet" href="styles.css">
     <script src="shell.js"></script>
     <script src="delta.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="dtk.js"></script>
 </head>
 <body class="applicationstyle deltabg">
     <script>
@@ -60,12 +64,20 @@
             </deltashell-tb>
             <div id="winarea" style="display: block; width: 100%; height: 100%; position: fixed;">
                 <script>
-                    newfileget = fetch(baseurl + '/service/dfs/mount/bin/get/term')
-                    .then(getres => getres.text())
-                    .then(async (getres) => {
-                        eval(getres)
-                        await cmdlet()
-                    })
+                    setTimeout(() => {
+                        console.log("loading term")
+                        newfileget = fetch(baseurl + '/service/dfs/mount/bin/get/term')
+                        .then(getres => getres.text())
+                        .then(async (getres) => {
+                            eval(getres)
+                            var process = new QDProcess("term")
+                            cmdletthis = {
+                                process
+                            }
+                            cmdres = await cmdlet.call(cmdletthis, {process})
+                            process.kill()
+                        })
+                    }, 100);
                     var dragactive = false
                     var currentwin = ""
 
@@ -113,4 +125,14 @@
     </script>
     <!-- <script src="/global/auth.js"></script> -->
     <script src="main.js"></script>
+    <!-- <script>
+        var once = false;
+        document.getElementById("winarea").addEventListener('touchstart', function(){
+            if (!once) {
+                once = true;
+                console.log("TOUCH")
+                $.getScript("/global/jqtouchpunch.js")
+            }
+        });
+    </script> -->
 </body>
