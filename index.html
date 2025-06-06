@@ -25,7 +25,7 @@
 </head>
 <body class="applicationstyle deltabg">
     <script>
-        var baseurl = window.location.protocol + "//" + window.location.hostname + ':3000'
+        var baseurl = window.location.protocol + "//" + window.location.hostname + (window.location.port? ":" + window.location.port : "")
         var animspeed = 100
         var globalz = 0
         var deltahideheader = function() {
