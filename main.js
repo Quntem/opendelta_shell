@@ -15,6 +15,11 @@ class QDProcess {
         this.init()
         this.pid = currentpid
         currentpid += 1
+        window.dispatchEvent(new CustomEvent("cmdletOpen", {
+            detail: {
+                process: this,
+            }
+        }))
     }
 
     registerWindow(window) {
@@ -39,6 +44,11 @@ class QDProcess {
             })
         }
         processes.splice(processes.indexOf(this), 1)
+        window.dispatchEvent(new CustomEvent("cmdletClose", {
+            detail: {
+                process: this,
+            }
+        }))
     }
 }
 
@@ -268,6 +278,24 @@ var runcmdlet = async function(inp, ps) {
     eval(getres)
     process = new QDProcess(inp)
     cmdres = await cmdlet({process, ...ps})
+    process.kill()
+    return cmdres
+}
+
+var runStandaloneCmdlet = async function(cmdletname, options) {
+    newfileget = await fetch(baseurl + '/service/dfs/mount/bin/get/' + cmdletname)
+    getres = await newfileget.text()
+    eval(getres)
+    if(options?.process == undefined) {
+        process = new QDProcess(cmdletname)
+    } else {
+        process = options.process
+    }
+    var shellpos = options?.shellpos? options.shellpos : "/"
+    if (options?.cmdarg != undefined) {
+        var cmdarg = options.cmdarg
+    }
+    cmdres = await cmdlet({process, shellpos, setshellpos: options?.setshellpos? options?.setshellpos : function(inp) {}, ...options})
     process.kill()
     return cmdres
 }

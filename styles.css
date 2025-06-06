@@ -58,6 +58,7 @@ deltashell-navigation-stack {
     height: 100%;
     position: relative;
     display: block;
+    overflow: hidden !important;
 }
 
 deltashell-navigation-stack-item {
@@ -65,6 +66,7 @@ deltashell-navigation-stack-item {
     height: 100%;
     position: absolute;
     display: block;
+    overflow: scroll;
 }
 
 .deltashell-list-item-title {

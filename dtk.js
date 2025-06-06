@@ -22,6 +22,13 @@ class DTKElement {
         this.element.remove()
         this.parent.elementList.splice(this.parent.elementList.indexOf(this), 1)
     }
+    removeChildren() {
+        this.elementList.forEach((element) => {
+            element.remove()
+        })
+        this.elementList = []
+        this.element.innerHTML = ""
+    }
 }
 
 DTK = {
@@ -81,6 +88,7 @@ DTK = {
             this.processListPosition = processes.length - 1
             this.windowprocessListPosition = process.windowlist.length - 1
             this.elementList = []
+            this.visible = true
         }
         append(element) {
             if(Array.isArray(element)) {
@@ -123,6 +131,14 @@ DTK = {
         set title(value) {
             this.options.title = value
             this.windowElement.setAttribute("wintitle", value)
+        }
+        hide() {
+            this.windowElement.style.display = "none"
+            this.visible = false
+        }
+        show() {
+            this.windowElement.style.display = "block"
+            this.visible = true
         }
     },
     button: class extends DTKElement {
@@ -672,6 +688,17 @@ DTK = {
         set onChange(value) {
             this.options.onChange = value
             this.element.addEventListener("change", value)
+        }
+    },
+    markdown: class extends DTKElement {
+        constructor(options) {
+            super(options)
+            this.element = document.createElement("md-block")
+            // this.scriptelem = document.createElement("script")
+            // this.scriptelem.setAttribute("type", "text/markdown")
+            this.element.innerHTML = options?.content
+            // this.element.appendChild(this.scriptelem)
+            applyStylesFromJson(this.element, options?.style)
         }
     }
 }

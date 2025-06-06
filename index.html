@@ -7,6 +7,7 @@
     <script src="/global/jquery.js"></script>
     <script src="/global/jqueryui.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script type="module" src="https://md-block.verou.me/md-block.js"></script>
     <link rel="stylesheet" href="/global/xterm.css" />
     <script type="module">
         import { FitAddon } from 'https://cdn.jsdelivr.net/npm/xterm-addon-fit@0.8.0/+esm';
@@ -15,7 +16,6 @@
     </script>
     <script src="/global/xterm.js"></script>
     <script src="comp/window.js"></script>
-    <!-- <script src="/global/comp/header.js"></script> -->
     <script src="global/jqtouchpunch.js"></script>
     <link rel="stylesheet" href="styles.css">
     <script src="shell.js"></script>
@@ -32,14 +32,8 @@
             $("beacon-header").hide()
         }
     </script>
-    <style>
-        .cl-organizationSwitcherTrigger {
-            color: white !important;
-        }
-    </style>
-    <!-- <beacon-header type="delta" appname="Cloud+ Delta" docname="New DeskSpace" style="background-color: #404040ae; border-bottom: #adadad; color: white;"></beacon-header> -->
     <div class="deltabg" id="multiapp-area" style="display: flex; flex-direction: row; width: 100%; height: calc(100% - 0px); overflow: none;">
-        <cloudplus-app-area style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
+        <div style="box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px, rgba(0, 0, 0, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;">
             <deltashell-tb>
                 <!-- <div style="margin-left: 15px">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-grip"><circle cx="12" cy="5" r="1"/><circle cx="19" cy="5" r="1"/><circle cx="5" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="19" r="1"/><circle cx="5" cy="19" r="1"/></svg>
@@ -65,74 +59,21 @@
             <div id="winarea" style="display: block; width: 100%; height: 100%; position: fixed;">
                 <script>
                     setTimeout(() => {
-                        console.log("loading term")
-                        newfileget = fetch(baseurl + '/service/dfs/mount/bin/get/term')
-                        .then(getres => getres.text())
-                        .then(async (getres) => {
-                            eval(getres)
-                            var process = new QDProcess("term")
-                            cmdletthis = {
-                                process
-                            }
-                            cmdres = await cmdlet.call(cmdletthis, {process})
-                            process.kill()
-                        })
+                        console.log("loading NDXShell")
+                        runStandaloneCmdlet("NDXShell")
                     }, 100);
-                    var dragactive = false
-                    var currentwin = ""
-
-                    var mousex = 0
-                    var mousey = 0
-                    var offsetx = 0
-                    var offsety = 0
-
-                    // document.getElementById("winarea").onclick = function() {
-                    //     if (dragactive) {
-                    //         dragactive = false
-                    //     } else {
-                    //         offsetx = mousex - $(currentwin).offset().left
-                    //         offsety = mousey - $(currentwin).offset().top
-                    //         dragactive = true
-                    //     }
-                    // }
-
-                    document.getElementById("winarea").onmousemove = function(event) {
-                        mousex = event.clientX
-                        mousey = event.clientY
-                        if (dragactive) {
-                            // $(currentwin).offset({
-                            //     top: (mousey - ($(currentwin).offset().top - mousey)),
-                            //     left: (mousex - ( $(currentwin).offset().left - mousex))
-                            // })
-                            // console.log($(currentwin).offset().top, $(currentwin).offset().left)
-                            $(currentmovewin).offset({
-                                top: (mousey - offsety),
-                                left: (mousex - offsetx)
-                            })
-                        }
-                    }
+                    setTimeout(() => {
+                        console.log("loading about")
+                        runStandaloneCmdlet("about")
+                    }, 200);
                 </script>
-                <!-- <deltashell-window titletype="expanded"></deltashell-window>
-                <deltashell-window></deltashell-window>
-                <deltashell-window titletype="expanded"></deltashell-window> -->
             </div>
-        </cloudplus-app-area>
+        </div>
     </div>
     <script>
         setInterval(() => {
             $("deltashell-tb").css("z-index", globalz)
         }, 10);
     </script>
-    <!-- <script src="/global/auth.js"></script> -->
     <script src="main.js"></script>
-    <!-- <script>
-        var once = false;
-        document.getElementById("winarea").addEventListener('touchstart', function(){
-            if (!once) {
-                once = true;
-                console.log("TOUCH")
-                $.getScript("/global/jqtouchpunch.js")
-            }
-        });
-    </script> -->
 </body>
